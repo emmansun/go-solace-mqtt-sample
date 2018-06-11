@@ -131,8 +131,6 @@ func serveSender(ctx *cli.Context) error {
 	producer.Options.SetPingTimeout(1 * time.Second)
 	producer.Options.SetKeepAlive(2 * time.Second)
 
-	log.Println(producer.Options)
-
 	err := producer.prepareSender()
 
 	if err != nil {
