@@ -55,10 +55,10 @@ var (
 var producer *Producer
 
 func (producer *Producer) close(seconds uint) {
-	if producer.Client != nil {
+	if producer.Client != nil && producer.Client.IsConnected() {
 		producer.Client.Disconnect(seconds * 1000)
-		producer.Client = nil
 	}
+	producer.Client = nil
 }
 
 func (producer *Producer) sendMsg(message string) {
