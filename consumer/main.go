@@ -109,7 +109,7 @@ func (consumer *Consumer) prepareSubscription() error {
 		case <-consumer.reconnect:
 			consumer.close(3)
 			for {
-				log.Println("re-connecting after 3 sends ...")
+				log.Println("re-connecting ...")
 				err := consumer.prepareSubscription()
 				if err != nil {
 					time.Sleep(5 * time.Second)
