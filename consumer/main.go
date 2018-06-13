@@ -74,7 +74,7 @@ func (consumer *Consumer) prepareSubscription() error {
 		return token.Error()
 	}
 
-	log.Printf("Start to subscribe to topic %v\n", consumer.Topic)
+	log.Printf("Start to subscribe to topic %v, clean session ? %v, Qos = %v\n", consumer.Topic, consumer.Options.CleanSession, consumer.Qos)
 	go func() {
 		consumer.done.Add(1)
 		defer func() {
@@ -137,9 +137,9 @@ func (consumer *Consumer) prepareSubscription() error {
 
 func handleMessage(client MQTT.Client, msg MQTT.Message) {
 	if msg.Topic() == consumer.Topic {
-		log.Printf("Received message %v from topic %v\n", string(msg.Payload()), msg.Topic())
+		log.Printf("Received message %v from topic %v, retained ? %v\n", string(msg.Payload()), msg.Topic(), msg.Retained())
 	} else {
-		log.Printf("Received message %v from topic %v, but it's NOT required.\n", string(msg.Payload()), msg.Topic())
+		log.Printf("Received message %v from topic %v, retained ? %v, but it's NOT required.\n", string(msg.Payload()), msg.Topic(), msg.Retained())
 	}
 }
 
