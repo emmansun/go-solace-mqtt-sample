@@ -108,12 +108,18 @@ func (consumer *Consumer) prepareSubscription() error {
 		select {
 		case <-consumer.reconnect:
 			consumer.close(3)
+		reconnect_loop:
 			for {
 				log.Println("re-connecting ...")
 				err := consumer.prepareSubscription()
 				if err != nil {
-					time.Sleep(5 * time.Second)
-					continue
+					select {
+					case <-time.After(5 * time.Second):
+						continue reconnect_loop
+					case <-consumer.shutdown:
+						log.Printf("Received shutdown instruction, re-connect go routine exit.")
+						return
+					}
 				}
 				break
 			}
