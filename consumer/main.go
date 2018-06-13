@@ -73,6 +73,7 @@ func (consumer *Consumer) prepareSubscription() error {
 	if token := consumer.Client.Connect(); token.Wait() && token.Error() != nil {
 		return token.Error()
 	}
+
 	log.Printf("Start to subscribe to topic %v\n", consumer.Topic)
 	go func() {
 		consumer.done.Add(1)
@@ -134,7 +135,11 @@ func (consumer *Consumer) prepareSubscription() error {
 }
 
 func handleMessage(client MQTT.Client, msg MQTT.Message) {
-	log.Printf("Received message %v from topic %v\n", string(msg.Payload()), msg.Topic())
+	if msg.Topic() == consumer.Topic {
+		log.Printf("Received message %v from topic %v\n", string(msg.Payload()), msg.Topic())
+	} else {
+		log.Printf("Received message %v from topic %v, but it's NOT required.\n", string(msg.Payload()), msg.Topic())
+	}
 }
 
 func serveListener(ctx *cli.Context) error {
@@ -167,7 +172,7 @@ func serveListener(ctx *cli.Context) error {
 	}
 	consumer.Options.SetPingTimeout(1 * time.Second)
 	consumer.Options.SetKeepAlive(2 * time.Second)
-
+	consumer.Options.SetDefaultPublishHandler(handleMessage)
 	err := consumer.prepareSubscription()
 
 	if err != nil {
@@ -179,7 +184,7 @@ func serveListener(ctx *cli.Context) error {
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "sample MQTT consumer application."
+	app.Name = "Sample MQTT consumer application."
 	app.Flags = []cli.Flag{MqttUrlFlag, UserFlag, PasswordFlag, ClientIdFlag, CleanSessionFlag, QosFlag, TopicFlag}
 	app.Action = serveListener
 	err := app.Run(os.Args)
