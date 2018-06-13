@@ -20,4 +20,6 @@ https://github.com/eclipse/paho.mqtt.golang/blob/master/cmd/sample/main.go
 ![Consumer's subscription](https://github.com/emmansun/go-solace-mqtt-sample/blob/master/solace_mqtt_2.png)
 
 **Non clean session and Qos = 1**
+![Consumer's subscription](https://github.com/emmansun/go-solace-mqtt-sample/blob/master/solace_mqtt_4.png)
+
 ![Consumer's subscription](https://github.com/emmansun/go-solace-mqtt-sample/blob/master/solace_mqtt_3.png)

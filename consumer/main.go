@@ -80,8 +80,9 @@ func (consumer *Consumer) prepareSubscription() error {
 		defer func() {
 			consumer.done.Done()
 		}()
+
+		token := consumer.Client.Subscribe(consumer.Topic, consumer.Qos, handleMessage)
 		for {
-			token := consumer.Client.Subscribe(consumer.Topic, consumer.Qos, handleMessage)
 			if token.WaitTimeout(3 * time.Second) {
 				select {
 				case <-consumer.shutdown:
