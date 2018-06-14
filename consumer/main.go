@@ -119,7 +119,7 @@ func (consumer *Consumer) prepareSubscription() error {
 					case <-time.After(5 * time.Second):
 						continue reconnect_loop
 					case <-consumer.shutdown:
-						log.Printf("Received shutdown instruction, re-connect go routine exit.")
+						log.Println("Received shutdown instruction, re-connect go routine exit.")
 						return
 					}
 				}
@@ -127,7 +127,7 @@ func (consumer *Consumer) prepareSubscription() error {
 			}
 			break
 		case <-consumer.shutdown:
-			log.Printf("Received shutdown instruction, re-connect go routine exit.")
+			log.Println("Received shutdown instruction, re-connect go routine exit.")
 			break
 		}
 
